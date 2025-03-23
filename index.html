@@ -10,6 +10,7 @@
         input { width: 90%; padding: 10px; margin: 10px 0; }
         button { padding: 10px 20px; background: blue; color: white; border: none; cursor: pointer; }
         #message { margin-top: 10px; font-size: 18px; display: none; }
+        #warning { margin-top: 15px; color: red; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
@@ -23,6 +24,7 @@
             <button type="submit">Login</button>
         </form>
         <div id="message"></div>
+        <div id="warning">⚠️ Security Alert: Phishing Test. <br> You just participated in a phishing awareness test. Always verify email senders before clicking links!.</div>
     </div>
 
     <script>
@@ -41,13 +43,20 @@
                 mode: "no-cors" // 🚀 Prevents CORS errors
             })
             .then(() => {
+                // ✅ Show success message
                 let messageBox = document.getElementById("message");
                 messageBox.innerText = "✅ Login Successful!";
                 messageBox.style.color = "green";
                 messageBox.style.display = "block";
+
+                // ⚠️ Show phishing simulation warning AFTER clicking login
+                let warningBox = document.getElementById("warning");
+                warningBox.style.display = "block";
             })
             .catch(error => {
                 console.error("Error:", error);
+
+                // ❌ Show error message
                 let messageBox = document.getElementById("message");
                 messageBox.innerText = "❌ Login Failed. Try again.";
                 messageBox.style.color = "red";
@@ -58,6 +67,7 @@
 
 </body>
 </html>
+
 
 
 
